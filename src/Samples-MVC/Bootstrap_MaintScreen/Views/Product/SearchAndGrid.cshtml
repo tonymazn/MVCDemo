@@ -1,0 +1,141 @@
+﻿@using DemoProduct.Components
+@using SamplesData.PagingClasses
+@model SamplesData.MaintenanceViewModel01
+
+@{
+  ViewBag.Title = "Search & Grid with Reset Button";
+}
+
+@using (Html.BeginForm())
+{
+  <!-- BEGIN HIDDEN FIELDS AREA -->
+  @Html.HiddenFor(m => m.EventCommand)
+  @Html.HiddenFor(m => m.EventArgument)
+  @Html.HiddenFor(m => m.Pager.PageIndex)
+  @Html.HiddenFor(m => m.LastSortExpression)
+  @Html.HiddenFor(m => m.SortExpression)
+  @Html.HiddenFor(m => m.SortDirection)
+  @Html.HiddenFor(m => m.SortDirectionNew)
+  <!-- END HIDDEN FIELDS AREA -->
+
+  <!-- ** BEGIN SEARCH AREA ** -->
+  if (Model.IsSearchAreaVisible)
+  {
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h1 class="panel-title">Search for Products</h1>
+      </div>
+      <div class="panel-body">
+        <div class="form-group">
+          @Html.LabelFor(m => m.ProductNameSearch, "Product Name")
+          @Html.TextBox5For(m => m.ProductNameSearch,
+                            HtmlExtensions.Html5InputTypes.text,
+                            "Product Name",
+                            "Enter a full or partial name to search for",
+                            true, true)
+        </div>
+      </div>
+      <div class="panel-footer">
+        <button id="btnSearch"
+                class="btn btn-sm btn-primary"
+                data-pdsa-action="search">
+          <i class="glyphicon glyphicon-search"></i>
+          &nbsp;Search
+        </button>
+        <button id="btnReset"
+                class="btn btn-sm btn-primary"
+                data-pdsa-action="resetsearch">
+          <i class="glyphicon glyphicon-share-alt"></i>
+          &nbsp;Reset
+        </button>
+      </div>
+    </div>
+  }
+  <!-- ** END SEARCH AREA ** -->
+
+  <!-- BEGIN GRID AREA -->
+  if (Model.IsGridAreaVisible)
+  {
+    <div class="table-responsive">
+      <table class="table table-condensed table-bordered table-striped table-hover">
+        <thead>
+          <tr>
+            <th>
+              <a href="#"
+                 data-pdsa-action="sort"
+                 data-pdsa-val="ProductName"
+                 data-pdsa-direction="Ascending">
+                Product Name
+              </a>
+            </th>
+            <th>
+              <a href="#"
+                 data-pdsa-action="sort"
+                 data-pdsa-val="IntroductionDate"
+                 data-pdsa-direction="Ascending">
+                Introduction Date
+              </a>
+            </th>
+            <th>
+              <a href="#"
+                 data-pdsa-action="sort"
+                 data-pdsa-val="Cost"
+                 data-pdsa-direction="Descending">
+                Cost
+              </a>
+            </th>
+            <th>
+              <a href="#"
+                 data-pdsa-action="sort"
+                 data-pdsa-val="Price"
+                 data-pdsa-direction="Ascending">
+                Price
+              </a>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach (var item in Model.Products)
+          {
+            <tr>
+              <td>
+                @item.ProductName
+              </td>
+              <td>
+                @item.IntroductionDate
+              </td>
+              <td>
+                @item.Cost.ToString("c")
+              </td>
+              <td>
+                @item.Price.ToString("c")
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    if (Model.IsPagerVisible)
+    {
+      <ul class="pagination pagination-sm">
+        @foreach (PagerItem item in Model.Pages)
+        {
+          <li class="@item.CssClass">
+            <a href="#"
+               data-pdsa-action="page"
+               data-pdsa-val="@item.Argument"
+               title="@item.Tooltip">
+              @Html.Raw(item.Text)
+            </a>
+          </li>
+        }
+      </ul>
+    }
+  }
+  <!-- END GRID AREA -->
+}
+
+@section scripts {
+  <script src="~/Scripts/pdsa-table-sort-page.js"></script>
+}
