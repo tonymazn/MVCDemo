@@ -1,4 +1,4 @@
-# MVCDemo
+# MVC Demo
 MVC + Bootstrap + ORM
 
 What is the project?
